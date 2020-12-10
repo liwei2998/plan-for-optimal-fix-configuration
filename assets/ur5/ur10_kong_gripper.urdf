@@ -1,0 +1,340 @@
+<?xml version="0.0" ?>
+<robot name="">
+	<link name="kong_base_link">
+		<inertial>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<mass value="4.00000"/>
+			<inertia ixx="0.01063" ixy="0" ixz="0" iyy="0.00875" iyz="0" izz="0.01809"/>
+		</inertial>
+		<visual>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<geometry>
+				<mesh filename="assets/ur5/liwei_ur_description/meshes/ur10/visual/base.dae" scale="1.00000 1.00000 1.00000"/>
+			</geometry>
+			<material name="mat_-1_0">
+				<color rgba="0.23438 0.72656 0.32812 1.00000" />
+			</material>
+		</visual>
+		<collision>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<geometry>
+				<mesh filename="assets/ur5/liwei_ur_description/meshes/ur10/collision/base.stl" scale="1.00000 1.00000 1.00000"/>
+			</geometry>
+		</collision>
+	</link>
+	<link name="kong_shoulder_link">
+		<inertial>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<mass value="7.77800"/>
+			<inertia ixx="0.03989" ixy="0" ixz="0" iyy="0.03770" iyz="0" izz="0.03412"/>
+		</inertial>
+		<visual>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<geometry>
+				<mesh filename="assets/ur5/liwei_ur_description/meshes/ur10/visual/shoulder.dae" scale="1.00000 1.00000 1.00000"/>
+			</geometry>
+			<material name="mat_0_0">
+				<color rgba="0.23438 0.72656 0.32812 1.00000" />
+			</material>
+		</visual>
+		<collision>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<geometry>
+				<mesh filename="assets/ur5/liwei_ur_description/meshes/ur10/collision/shoulder.stl" scale="1.00000 1.00000 1.00000"/>
+			</geometry>
+		</collision>
+	</link>
+	<link name="kong_upper_arm_link">
+		<inertial>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.30600"/>
+			<mass value="12.93000"/>
+			<inertia ixx="0.65013" ixy="0" ixz="0" iyy="0.64040" iyz="0" izz="0.06264"/>
+		</inertial>
+		<visual>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<geometry>
+				<mesh filename="assets/ur5/liwei_ur_description/meshes/ur10/visual/upperarm.dae" scale="1.00000 1.00000 1.00000"/>
+			</geometry>
+			<material name="mat_1_0">
+				<color rgba="0.95312 0.75781 0.05078 1.00000" />
+			</material>
+		</visual>
+		<collision>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<geometry>
+				<mesh filename="assets/ur5/liwei_ur_description/meshes/ur10/collision/upperarm.stl" scale="1.00000 1.00000 1.00000"/>
+			</geometry>
+		</collision>
+	</link>
+	<link name="kong_forearm_link">
+		<inertial>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.28615"/>
+			<mass value="3.87000"/>
+			<inertia ixx="0.15749" ixy="0" ixz="0" iyy="0.15609" iyz="0" izz="0.01167"/>
+		</inertial>
+		<visual>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<geometry>
+				<mesh filename="assets/ur5/liwei_ur_description/meshes/ur10/visual/forearm.dae" scale="1.00000 1.00000 1.00000"/>
+			</geometry>
+			<material name="mat_2_0">
+				<color rgba="0.85547 0.19531 0.21094 1.00000" />
+			</material>
+		</visual>
+		<collision>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<geometry>
+				<mesh filename="assets/ur5/liwei_ur_description/meshes/ur10/collision/forearm.stl" scale="1.00000 1.00000 1.00000"/>
+			</geometry>
+		</collision>
+	</link>
+	<link name="kong_wrist_1_link">
+		<inertial>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<mass value="1.96000"/>
+			<inertia ixx="0.00438" ixy="0" ixz="0" iyy="0.00408" iyz="0" izz="0.00338"/>
+		</inertial>
+		<visual>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<geometry>
+				<mesh filename="assets/ur5/liwei_ur_description/meshes/ur10/visual/wrist1.dae" scale="1.00000 1.00000 1.00000"/>
+			</geometry>
+			<material name="mat_3_0">
+				<color rgba="0.28125 0.51953 0.92578 1.00000" />
+			</material>
+		</visual>
+		<collision>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<geometry>
+				<mesh filename="assets/ur5/liwei_ur_description/meshes/ur10/collision/wrist1.stl" scale="1.00000 1.00000 1.00000"/>
+			</geometry>
+		</collision>
+	</link>
+	<link name="kong_wrist_2_link">
+		<inertial>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<mass value="1.96000"/>
+			<inertia ixx="0.00438" ixy="0" ixz="0" iyy="0.00338" iyz="0" izz="0.00409"/>
+		</inertial>
+		<visual>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<geometry>
+				<mesh filename="assets/ur5/liwei_ur_description/meshes/ur10/visual/wrist2.dae" scale="1.00000 1.00000 1.00000"/>
+			</geometry>
+			<material name="mat_4_0">
+				<color rgba="0.23438 0.72656 0.32812 1.00000" />
+			</material>
+		</visual>
+		<collision>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<geometry>
+				<mesh filename="assets/ur5/liwei_ur_description/meshes/ur10/collision/wrist2.stl" scale="1.00000 1.00000 1.00000"/>
+			</geometry>
+		</collision>
+	</link>
+	<link name="kong_wrist_3_link">
+		<inertial>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<mass value="0.20200"/>
+			<inertia ixx="0.00018" ixy="0" ixz="0" iyy="0.00031" iyz="0" izz="0.00018"/>
+		</inertial>
+		<visual>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<geometry>
+				<mesh filename="assets/ur5/liwei_ur_description/meshes/ur10/visual/wrist3.dae" scale="1.00000 1.00000 1.00000"/>
+			</geometry>
+			<material name="mat_5_0">
+				<color rgba="0.95312 0.75781 0.05078 1.00000" />
+			</material>
+		</visual>
+		<collision>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<geometry>
+				<mesh filename="assets/ur5/liwei_ur_description/meshes/ur10/collision/wrist3.stl" scale="1.00000 1.00000 1.00000"/>
+			</geometry>
+		</collision>
+	</link>
+	<link name="kong_ee_link">
+		<inertial>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<mass value="1.00000"/>
+			<inertia ixx="0.00000" ixy="0" ixz="0" iyy="0.00000" iyz="0" izz="0.00000"/>
+		</inertial>
+	</link>
+	<link name="base_link2">
+		<inertial>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00018 0.01717 0.00798"/>
+			<mass value="0.11784"/>
+			<inertia ixx="0.00046" ixy="0" ixz="0" iyy="0.00013" iyz="0" izz="0.00051"/>
+		</inertial>
+		<visual>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<geometry>
+				<mesh filename="assets/ur5/collision/base_link1.STL" scale="1.00000 1.00000 1.00000"/>
+			</geometry>
+			<material name="mat_-1_0">
+				<color rgba="0.79216 0.81961 0.93333 1.00000" />
+			</material>
+		</visual>
+		<collision>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<geometry>
+				<mesh filename="assets/ur5/collision/base_link1.STL" scale="1.00000 1.00000 1.00000"/>
+			</geometry>
+		</collision>
+	</link>
+	<link name="rigid_link2">
+		<inertial>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00246 0.00390 0.01312"/>
+			<mass value="0.04453"/>
+			<inertia ixx="0.00005" ixy="0" ixz="0" iyy="0.00004" iyz="0" izz="0.00002"/>
+		</inertial>
+		<visual>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<geometry>
+				<mesh filename="assets/ur5/collision/rigid_link.STL" scale="1.00000 1.00000 1.00000"/>
+			</geometry>
+			<material name="mat_0_0">
+				<color rgba="0.79216 0.81961 0.93333 1.00000" />
+			</material>
+		</visual>
+		<collision>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<geometry>
+				<mesh filename="assets/ur5/collision/rigid_link.STL" scale="1.00000 1.00000 1.00000"/>
+			</geometry>
+		</collision>
+	</link>
+	<link name="rigid_tip_link2">
+		<inertial>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00774 -0.00085 -0.06113"/>
+			<mass value="0.01345"/>
+			<inertia ixx="0.00001" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00000"/>
+		</inertial>
+		<visual>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<geometry>
+				<mesh filename="assets/ur5/collision/rigid_tip_link.STL" scale="1.00000 1.00000 1.00000"/>
+			</geometry>
+			<material name="mat_1_0">
+				<color rgba="0.79216 0.81961 0.93333 1.00000" />
+			</material>
+		</visual>
+		<collision>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<geometry>
+				<mesh filename="assets/ur5/collision/rigid_tip_link.STL" scale="1.00000 1.00000 1.00000"/>
+			</geometry>
+		</collision>
+	</link>
+	<link name="soft_tip_link2">
+		<inertial>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="-0.06728 -0.00000 -0.00124"/>
+			<mass value="0.02675"/>
+			<inertia ixx="0.00001" ixy="0" ixz="0" iyy="0.00004" iyz="0" izz="0.00004"/>
+		</inertial>
+		<visual>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<geometry>
+				<mesh filename="assets/ur5/collision/soft_tip_link.STL" scale="1.00000 1.00000 1.00000"/>
+			</geometry>
+			<material name="mat_2_0">
+				<color rgba="0.79216 0.81961 0.93333 1.00000" />
+			</material>
+		</visual>
+		<collision>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<geometry>
+				<mesh filename="assets/ur5/collision/soft_tip_link.STL" scale="1.00000 1.00000 1.00000"/>
+			</geometry>
+		</collision>
+	</link>
+	<joint name="kong_shoulder_pan_joint" type="revolute">
+		<parent link="kong_base_link"/>
+		<child link="kong_shoulder_link"/>
+		<dynamics damping="1.0" friction="0.0001"/>
+		<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.12730"/>
+		<axis xyz="0.00000 0.00000 1.00000"/>
+		<limit effort="330.0" lower="-6.2831853" upper="6.2831853" velocity="2.16"/>
+	</joint>
+	<joint name="kong_shoulder_lift_joint" type="revolute">
+		<parent link="kong_shoulder_link"/>
+		<child link="kong_upper_arm_link"/>
+		<dynamics damping="1.0" friction="0.0001"/>
+		<origin rpy="0.00000 1.57080 -0.00000" xyz="0.00000 0.22094 0.00000"/>
+		<axis xyz="0.00000 1.00000 0.00000"/>
+		<limit effort="330.0" lower="-6.2831853" upper="6.2831853" velocity="2.16"/>
+	</joint>
+	<joint name="kong_elbow_joint" type="revolute">
+		<parent link="kong_upper_arm_link"/>
+		<child link="kong_forearm_link"/>
+		<dynamics damping="1.0" friction="0.0001"/>
+		<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 -0.17190 0.61200"/>
+		<axis xyz="0.00000 1.00000 0.00000"/>
+		<limit effort="150.0" lower="-6.2831853" upper="6.2831853" velocity="3.15"/>
+	</joint>
+	<joint name="kong_wrist_1_joint" type="revolute">
+		<parent link="kong_forearm_link"/>
+		<child link="kong_wrist_1_link"/>
+		<dynamics damping="1.0" friction="0.0001"/>
+		<origin rpy="0.00000 1.57080 -0.00000" xyz="0.00000 0.00000 0.57230"/>
+		<axis xyz="0.00000 1.00000 0.00000"/>
+		<limit effort="54.0" lower="-6.2831853" upper="6.2831853" velocity="3.2"/>
+	</joint>
+	<joint name="kong_wrist_2_joint" type="revolute">
+		<parent link="kong_wrist_1_link"/>
+		<child link="kong_wrist_2_link"/>
+		<dynamics damping="1.0" friction="0.0001"/>
+		<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.11490 0.00000"/>
+		<axis xyz="0.00000 0.00000 1.00000"/>
+		<limit effort="54.0" lower="-6.2831853" upper="6.2831853" velocity="3.2"/>
+	</joint>
+	<joint name="kong_wrist_3_joint" type="revolute">
+		<parent link="kong_wrist_2_link"/>
+		<child link="kong_wrist_3_link"/>
+		<dynamics damping="1.0" friction="0.0001"/>
+		<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.11570"/>
+		<axis xyz="0.00000 1.00000 0.00000"/>
+		<limit effort="54.0" lower="-6.2831853" upper="6.2831853" velocity="3.2"/>
+	</joint>
+	<joint name="kong_ee_fixed_joint" type="fixed">
+		<parent link="kong_wrist_3_link"/>
+		<child link="kong_ee_link"/>
+		<dynamics damping="1.0" friction="0.0001"/>
+		<origin rpy="0.00000 -0.00000 1.57080" xyz="0.00000 0.09220 0.00000"/>
+		<axis xyz="0.00000 0.00000 0.00000"/>
+	</joint>
+	<joint name="joint_dummy1" type="fixed">
+		<parent link="kong_ee_link"/>
+		<child link="base_link2"/>
+		<dynamics damping="1.0" friction="0.0001"/>
+		<origin rpy="1.57080 0.00000 1.57080" xyz="0.00000 0.00000 0.00000"/>
+		<axis xyz="0.00000 0.00000 1.00000"/>
+	</joint>
+	<joint name="rigid_rev_joint2" type="revolute">
+		<parent link="base_link2"/>
+		<child link="rigid_link2"/>
+		<dynamics damping="1.0" friction="0.0001"/>
+		<origin rpy="0.00000 -0.00000 0.00000" xyz="-0.01800 0.06040 0.03100"/>
+		<axis xyz="0.00000 -1.00000 0.00000"/>
+		<limit
+	      lower="-3.1415926"
+	      upper="3.1415926"
+	      effort="0"
+	      velocity="0" />
+	</joint>
+	<joint name="rigid_tip_joint2" type="fixed">
+		<parent link="rigid_link2"/>
+		<child link="rigid_tip_link2"/>
+		<dynamics damping="1.0" friction="0.0001"/>
+		<origin rpy="0.00000 -0.13252 3.14159" xyz="0.02939 -0.00085 0.11906"/>
+		<axis xyz="0.00000 0.00000 0.00000"/>
+	</joint>
+	<joint name="soft_tip_joint2" type="fixed">
+		<parent link="base_link2"/>
+		<child link="soft_tip_link2"/>
+		<dynamics damping="1.0" friction="0.0001"/>
+		<origin rpy="0.00000 -0.66549 0.00000" xyz="0.11681 0.06100 0.09874"/>
+		<axis xyz="0.00000 0.00000 0.00000"/>
+	</joint>
+</robot>
