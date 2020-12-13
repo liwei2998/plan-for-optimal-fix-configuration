@@ -4,12 +4,12 @@
     <xacro:arg name="transmission_hw_interface" default="hardware_interface/PositionJointInterface"/>
 
     <!-- common stuff -->
-    <xacro:include filename="$(find lw_ur_description)/urdf/common.gazebo.xacro" />
+    <xacro:include filename="$(find liwei_ur_description)/urdf/common.gazebo.xacro" />
 
     <!-- ur10 -->
 
-    <xacro:include filename="$(find lw_ur_description)/urdf/ur10.urdf.xacro" />
-    <xacro:include filename="$(find lw_ur_description)/urdf/ur10_kong.urdf.xacro" />
+    <xacro:include filename="$(find liwei_ur_description)/urdf/ur10.urdf.xacro" />
+    <xacro:include filename="$(find liwei_ur_description)/urdf/ur10_kong.urdf.xacro" />
     <xacro:include filename="$(find dual_description)/urdf/soft_hybrid_gripper_URDF.urdf" />
     <xacro:include filename="$(find dual_description)/urdf/soft_hybrid_gripper2_URDF.urdf" />
     <xacro:include filename="$(find dual_description)/urdf/robot_movable_table.urdf" />
@@ -17,7 +17,7 @@
     <xacro:include filename="$(find dual_description)/urdf/robot_optical_table_kong.urdf" />
 
     <!-- arm -->
-    <xacro:arg name="kinematics_config" default="$(find lw_ur_description)/config/ur10_default.yaml"/>
+    <xacro:arg name="kinematics_config" default="$(find liwei_ur_description)/config/ur10_default.yaml"/>
     <xacro:ur10_robot prefix="hong_" joint_limited="false"
     shoulder_pan_lower_limit="${-2*pi}" shoulder_pan_upper_limit="${2*pi}"
     shoulder_lift_lower_limit="${-2*pi}" shoulder_lift_upper_limit="${2*pi}"
@@ -29,7 +29,7 @@
     kinematics_file="${load_yaml('$(arg kinematics_config)')}" />
 
 
-    <xacro:arg name="kinematics_config_kong" default="$(find lw_ur_description)/config/ur10_default.yaml"/>
+    <xacro:arg name="kinematics_config_kong" default="$(find liwei_ur_description)/config/ur10_default.yaml"/>
     <xacro:ur10_robot_kong prefix="kong_" joint_limited="false"
     shoulder_pan_lower_limit="${-2*pi}" shoulder_pan_upper_limit="${2*pi}"
     shoulder_lift_lower_limit="${-2*pi}" shoulder_lift_upper_limit="${2*pi}"

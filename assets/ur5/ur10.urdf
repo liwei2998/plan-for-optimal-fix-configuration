@@ -30,12 +30,12 @@
   <link name="base_link">
     <visual>
       <geometry>
-        <mesh filename="package://liwei_ur_description/meshes/ur10/visual/base.dae"/>
+        <mesh filename="package://lw_ur_description/meshes/ur10/visual/base.dae"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://liwei_ur_description/meshes/ur10/collision/base.stl"/>
+        <mesh filename="package://lw_ur_description/meshes/ur10/collision/base.stl"/>
       </geometry>
     </collision>
     <inertial>
@@ -55,12 +55,12 @@
   <link name="shoulder_link">
     <visual>
       <geometry>
-        <mesh filename="package://liwei_ur_description/meshes/ur10/visual/shoulder.dae"/>
+        <mesh filename="package://lw_ur_description/meshes/ur10/visual/shoulder.dae"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://liwei_ur_description/meshes/ur10/collision/shoulder.stl"/>
+        <mesh filename="package://lw_ur_description/meshes/ur10/collision/shoulder.stl"/>
       </geometry>
     </collision>
     <inertial>
@@ -80,12 +80,12 @@
   <link name="upper_arm_link">
     <visual>
       <geometry>
-        <mesh filename="package://liwei_ur_description/meshes/ur10/visual/upperarm.dae"/>
+        <mesh filename="package://lw_ur_description/meshes/ur10/visual/upperarm.dae"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://liwei_ur_description/meshes/ur10/collision/upperarm.stl"/>
+        <mesh filename="package://lw_ur_description/meshes/ur10/collision/upperarm.stl"/>
       </geometry>
     </collision>
     <inertial>
@@ -105,12 +105,12 @@
   <link name="forearm_link">
     <visual>
       <geometry>
-        <mesh filename="package://liwei_ur_description/meshes/ur10/visual/forearm.dae"/>
+        <mesh filename="package://lw_ur_description/meshes/ur10/visual/forearm.dae"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://liwei_ur_description/meshes/ur10/collision/forearm.stl"/>
+        <mesh filename="package://lw_ur_description/meshes/ur10/collision/forearm.stl"/>
       </geometry>
     </collision>
     <inertial>
@@ -130,12 +130,12 @@
   <link name="wrist_1_link">
     <visual>
       <geometry>
-        <mesh filename="package://liwei_ur_description/meshes/ur10/visual/wrist1.dae"/>
+        <mesh filename="package://lw_ur_description/meshes/ur10/visual/wrist1.dae"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://liwei_ur_description/meshes/ur10/collision/wrist1.stl"/>
+        <mesh filename="package://lw_ur_description/meshes/ur10/collision/wrist1.stl"/>
       </geometry>
     </collision>
     <inertial>
@@ -155,12 +155,12 @@
   <link name="wrist_2_link">
     <visual>
       <geometry>
-        <mesh filename="package://liwei_ur_description/meshes/ur10/visual/wrist2.dae"/>
+        <mesh filename="package://lw_ur_description/meshes/ur10/visual/wrist2.dae"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://liwei_ur_description/meshes/ur10/collision/wrist2.stl"/>
+        <mesh filename="package://lw_ur_description/meshes/ur10/collision/wrist2.stl"/>
       </geometry>
     </collision>
     <inertial>
@@ -180,12 +180,12 @@
   <link name="wrist_3_link">
     <visual>
       <geometry>
-        <mesh filename="package://liwei_ur_description/meshes/ur10/visual/wrist3.dae"/>
+        <mesh filename="package://lw_ur_description/meshes/ur10/visual/wrist3.dae"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://liwei_ur_description/meshes/ur10/collision/wrist3.stl"/>
+        <mesh filename="package://lw_ur_description/meshes/ur10/collision/wrist3.stl"/>
       </geometry>
     </collision>
     <inertial>
