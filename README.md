@@ -1,5 +1,15 @@
 # Collision Free Configuration
+Before start, make sure that you have installed:
+
+```
+pip install Shapely==1.7.1
+```
+```
+pip install matplotlib==2.2.5
+```
+
 Launch your robot in virtual environment, the following command is just an example.
+
 ```
 $roslaunch dual_arm_moveit demo.launch
 ```
@@ -22,3 +32,5 @@ To load the pybullet simulated environment for this lab as shown below, simply r
 ```
 python demo.py
 ```
+
+Because Pybullet only accept .urdf files, run combineURDF.py to transform your .xacro files.
