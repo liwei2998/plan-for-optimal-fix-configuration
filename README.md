@@ -4,8 +4,9 @@ Before start, make sure that you have installed:
 ```
 pip install Shapely==1.7.1
 ```
+The following pybullet_planning package is a little different from python pybullet_planning package.
 ```
-pip install matplotlib==2.2.5
+git clone https://github.com/liwei2998/pybullet_planning_new.git
 ```
 
 Launch your robot in virtual environment, the following command is just an example.
@@ -14,7 +15,7 @@ Launch your robot in virtual environment, the following command is just an examp
 $roslaunch dual_arm_moveit demo.launch
 ```
 
-Generate collision free configurations.
+Generate collision free configurations and choose the max distance configuration.
 
 ```
 $python config_generalization.py
