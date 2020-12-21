@@ -10,35 +10,17 @@ import time
 import tf
 import numpy as np
 import geometry_msgs.msg
+import pybullet as p
 import trajectory_msgs.msg
 from moveit_msgs.msg import PlanningScene, PlanningSceneComponents, ObjectColor, Constraints, OrientationConstraint
 from geometry_msgs.msg import PoseStamped
-from moveit_msgs.srv import GetPositionIK
-from moveit_msgs.srv import GetPositionIKRequest
-from moveit_msgs.srv import GetPositionIKResponse
 from std_msgs.msg import String,Empty,UInt16
 import random
 from math import pi
 import matplotlib.pyplot as plt
-from shapely.geometry import *
-
-moveit_commander.roscpp_initialize(sys.argv)
-rospy.init_node('dual_arm_origami', anonymous=True)
-listener = tf.TransformListener()
-robot = moveit_commander.RobotCommander()
-scene = moveit_commander.PlanningSceneInterface()
-rospy.sleep(2)
-group_name1 = "hong_arm"
-group1 = moveit_commander.MoveGroupCommander(group_name1)
-group_name2 = "kong_arm"
-group2 = moveit_commander.MoveGroupCommander(group_name2)
-group_name3 = "hong_hand"
-group3 = moveit_commander.MoveGroupCommander(group_name3)
-group_name4 = "kong_hand"
-group4 = moveit_commander.MoveGroupCommander(group_name4)
-display_trajectory_publisher = rospy.Publisher('/move_group/display_planned_path',
-                                               moveit_msgs.msg.DisplayTrajectory,
-                                               queue_size=20)
+import test_config as tc
+import test_planner as tp
+import help_func as hf
 
 def scale_trajectory_speed(traj, scale):
     new_traj = moveit_msgs.msg.RobotTrajectory()
@@ -64,7 +46,7 @@ def scale_trajectory_speed(traj, scale):
 
 def robkong_go_to_home(times,vel):
     if times == 1:
-        joint_values = [-1.75, -1.95, -1.34, -1.4, 1.7, 0.22]
+        joint_values = [-1.24, -2.23, -1.6,-1.13,1.46,1.13]
     elif times == 2:
         joint_values = [-2.03, -1.1, 1.93, -2.42, -1.5, 1.23]
     group2.set_joint_value_target(joint_values)
@@ -109,89 +91,59 @@ def addCollisionObjects():
     paper_name = 'paper'
     scene.add_box(paper_name, paper_pose, (0.21, 0.297, 0.002))
 
-def is_inPoly(polygen,points):
-    # this is to determine is a point is in a polygen
-    line = LineString(polygen)
-    point = Point(points)
-    polygen = Polygon(line)
-    return polygen.contains(point)
-
-def get_poly_from_gripper(robot_arm):
-    #this is to get the gripper polygen of a chosen robot arm
-    if robot_arm == "robhong":
-        group = group1
-    elif robot_arm == "robkong":
-        group = group2
-    else:
-        print "Input error, please input a valid robot arm!"
-        return 0
-    center = group.get_current_pose().pose
-    c_pos = np.array([center.position.x,center.position.y,center.position.z])
-    c_ori = [center.orientation.x,center.orientation.y,center.orientation.z,center.orientation.w]
-    c_mat = tf.transformations.quaternion_matrix(c_ori)
-    c_mat = c_mat.transpose()
-    x_axis = c_mat[0]
-    x_axis = x_axis[:3]
-    x_axis[2] = 0
-    y_axis = c_mat[1]
-    y_axis = y_axis[:3]
-    y_axis[2] = 0
-    x_axis = x_axis / np.linalg.norm(x_axis)
-    y_axis = y_axis / np.linalg.norm(y_axis)
-    p1 = c_pos + 0.04*x_axis + 0.08*y_axis
-    p2 = c_pos + 0.04*x_axis - 0.08*y_axis
-    p3 = c_pos - 0.04*x_axis - 0.08*y_axis
-    p4 = c_pos - 0.04*x_axis + 0.08*y_axis
-    return p1, p2, p3, p4
-
-############_____INITIALIZATION_____############
+#################### INITIALIZATION #######################
+moveit_commander.roscpp_initialize(sys.argv)
+rospy.init_node('dual_arm_origami', anonymous=True)
+listener = tf.TransformListener()
+robot = moveit_commander.RobotCommander()
+scene = moveit_commander.PlanningSceneInterface()
+rospy.sleep(2)
+group_name1 = "hong_arm"
+group1 = moveit_commander.MoveGroupCommander(group_name1)
+group_name2 = "kong_arm"
+group2 = moveit_commander.MoveGroupCommander(group_name2)
+group_name3 = "hong_hand"
+group3 = moveit_commander.MoveGroupCommander(group_name3)
+group_name4 = "kong_hand"
+group4 = moveit_commander.MoveGroupCommander(group_name4)
+display_trajectory_publisher = rospy.Publisher('/move_group/display_planned_path',
+                                               moveit_msgs.msg.DisplayTrajectory,
+                                               queue_size=20)
+rospy.sleep(1)
 addCollisionObjects()
 rospy.sleep(1)
 robkong_go_to_home(1,0.4)
 robhong_go_to_home(1,0.4)
+rospy.sleep(1)
 hybridPub(0.6981,"robhong")
 hybridPub(0.6981,"robkong")
 # scene.remove_world_object(paper_name)
-############_____INITIALIZATION_____############
+#################### INITIALIZATION #######################
 
-# get collision free ik solutions from random sample, solutions stored in conf[]
-ik = get_ik.GetIK(group_name1)
-pose = PoseStamped()
-pose.header.frame_id = "world"
-pose.header.stamp = rospy.Time.now()
-pose.pose.position.z = 0.71 + 0.1411 #0.71(table height) + 0.11411 (dis_z between rogid_tip_link and hong_tool0)
-polygen = get_poly_from_gripper("robkong")
-start_time = time.time()
-a = np.arange(-0.105,0.105,0.0001)
-b = np.arange(-0.145,0.145,0.0001)
-c = np.arange(0,np.pi*2,np.pi/1000)
-conf = []
-i = 0
-while (i<40):
-    x = random.choice(a)
-    y = random.choice(b)
-    pose.pose.position.x = x
-    pose.pose.position.y = y
-    if is_inPoly(polygen,(x,y,0.87)) == 1:
-        continue
-    theta = random.choice(c)
-    mat = [[np.cos(theta),np.sin(theta),0,0],[np.sin(theta),-np.cos(theta),0,0],[0,0,-1,0],[0,0,0,1]]
-    ori = tf.transformations.quaternion_from_matrix(mat)
-    pose.pose.orientation.x = ori[0]
-    pose.pose.orientation.y = ori[1]
-    pose.pose.orientation.z = ori[2]
-    pose.pose.orientation.w = ori[3]
-    m = ik.get_ik(pose,robot)
-    if m == []:
-        continue
-    conf.append(m)
-    i += 1
-print "---%s seconds ----", time.time()-start_time
+################### find the max distance config ##################
+center = group2.get_current_pose().pose
+robot_state = robot.get_current_state()
+poly = ((0.105,0.145,0.71),(0.105,-0.145,0.71),(-0.105,-0.145,0.71),(-0.105,0.145,0.71))
+configs = hf.config_generate(group_name1,center,robot_state,poly,num=35)
+p.disconnect()
+k_start = [-1.46, -2.36, -1.52, -0.82, 1.81, 2.65, 0.7]
+# k_start = [-1.75, -1.95, -1.34, -1.4, 1.7, 0.22, 0.7]
+h_start = [0.96, -1.07, 1.37, -1.31, -1.7, 0.32, 0.7]
+dis = hf.get_dis(configs,k_start,h_start,p.DIRECT)
+p.disconnect()
+index = dis.index(max(dis))
+sid = sorted(range(len(dis)),key=lambda k:dis[k], reverse=True)
+goal_conf = configs[index][:6]
+print goal_conf
+################### find the max distance config ##################
 
-#test
-print "-------------test--------------"
+################### simulation ##################
+print "-------------simulation--------------"
 print "please see the arm's movement in the Moveit"
-joint_values = conf[7][:6]
-print "the joint values of arm hong is ", joint_values
-group1.set_joint_value_target(joint_values)
+group2.set_joint_value_target(k_start[:6])
+group2.go()
+rospy.sleep(0.5)
+print "the joint values of arm hong is ", goal_conf
+group1.set_joint_value_target(goal_conf)
 group1.go()
+################### simulation ##################
