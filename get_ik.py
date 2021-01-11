@@ -23,7 +23,7 @@ class GetIK(object):
         self.ik_srv.wait_for_service()
 
     def get_ik(self, pose_stamped,
-            robot,
+            robot_state,
             group=None,
             ik_timeout=None,
             ik_attempts=None,
@@ -48,7 +48,7 @@ class GetIK(object):
             avoid_collisions = self.avoid_collisions
         req = GetPositionIKRequest()
         req.ik_request.group_name = self.group_name
-        req.ik_request.robot_state = robot.get_current_state()
+        req.ik_request.robot_state = robot_state
         req.ik_request.pose_stamped = pose_stamped
         # req.ik_request.ik_link_name = "rigid_tip_link1"
         req.ik_request.timeout = rospy.Duration(ik_timeout)

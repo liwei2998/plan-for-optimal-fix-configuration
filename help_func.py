@@ -108,12 +108,12 @@ def paper_polygen(tag_pos,tag_rot):
 def config_generate(group,center,kong_configs,robot_state,tag_pos,tag_rot,num=20,sim=True):
     # get collision free ik solutions from random sample, solutions stored in conf[]
     #step1: set up simulator
-    physicsClient = p.connect(p.DIRECT)
+    physicsClient = p.connect(p.GUI)
     p.setAdditionalSearchPath(pybullet_data.getDataPath())
     p.setPhysicsEngineParameter(enableFileCaching=0)
     p.setGravity(0, 0, -9.8)
     p.configureDebugVisualizer(p.COV_ENABLE_GUI, False)
-    p.configureDebugVisualizer(p.COV_ENABLE_SHADOWS, True)
+    p.configureDebugVisualizer(p.COV_ENABLE_SHADOWS, False)
     p.resetDebugVisualizerCamera(cameraDistance=1.400, cameraYaw=58.000, cameraPitch=-42.200, cameraTargetPosition=(0.0, 0.0, 0.0))
     # load objects
     plane = p.loadURDF("plane.urdf")
@@ -142,21 +142,23 @@ def config_generate(group,center,kong_configs,robot_state,tag_pos,tag_rot,num=20
     pose = PoseStamped()
     pose.header.frame_id = "world"
     pose.header.stamp = rospy.Time.now()
-    pose.pose.position.z = 0.71 + 0.1411 #0.71(table height) + 0.11411 (dis_z between rogid_tip_link and hong_tool0)
+    pose.pose.position.z = 0.704 + 0.1411 #0.71(table height) + 0.11411 (dis_z between rogid_tip_link and hong_tool0)
     polygen = get_poly_from_gripper(center)
     c = np.arange(-np.pi,np.pi,np.pi/1000)
     conf = []
     i = 0
+    poly = paper_polygen(tag_pos,tag_rot)
     while (i<num):
         theta = random.choice(c)
         mat = [[np.cos(theta),np.sin(theta),0,0],[np.sin(theta),-np.cos(theta),0,0],[0,0,-1,0],[0,0,0,1]]
         trans = np.array([-0.07200367743271228, 0.059549999999985115, -0.1411026781906094, 0])
         delta = np.dot(np.array(mat),trans) #sample rigid_link_tip1's position, and transform this position to hong_tool0's position, to compute ik
         x, y = weight_sample_x_y()
-        x,y = plane_transformation(x,y,tag_pos,tag_rot)
+        x, y = plane_transformation(x,y,tag_pos,tag_rot)
+        rospy.sleep(0.5)
         pose.pose.position.x = x + delta[0]
         pose.pose.position.y = y + delta[1]
-        poly = paper_polygen(tag_pos,tag_rot)
+
         if is_inPoly(polygen,(x,y,0.87)) == 1:
             continue
         ori = tf.transformations.quaternion_from_matrix(mat)
@@ -164,12 +166,13 @@ def config_generate(group,center,kong_configs,robot_state,tag_pos,tag_rot,num=20
         pose.pose.orientation.y = ori[1]
         pose.pose.orientation.z = ori[2]
         pose.pose.orientation.w = ori[3]
+
         m = ik.get_ik(pose,robot_state)
         if m == []:
             print "no configs"
             continue
         elif test_fk(m[:6],poly,robot_state) == 0:
-            print "not in papr polygen"
+            print "not in paper polygen"
             #to make sure that rigid_link_tip1 is in the paper
             continue
         else:
@@ -186,13 +189,20 @@ def config_generate(group,center,kong_configs,robot_state,tag_pos,tag_rot,num=20
                 else:
                     break
             if count == len(kong_configs):
+                # for bb in range(7):
+                #     if m[bb] >= 3.1415926:
+                #         m[bb] = m[bb] - 3.1415926
+                #     elif m[bb] <= -3.1415926:
+                #         m[bb] = m[bb] + 3.1415926
+                print "m",m
                 conf.append(m)
                 i += 1
     conf = np.array(conf)
     conf = conf[:,:7]
     conf = conf.tolist()
     return conf
-
+def ppp():
+    print 1
 def test_fk(config,paper_polygen,robot_state):
     #test if rigid_tip_link1 is in the paper polygen
     ik_srv = rospy.ServiceProxy('/compute_fk', GetPositionFK)
@@ -203,8 +213,8 @@ def test_fk(config,paper_polygen,robot_state):
     header.stamp = rospy.Time.now()
     fk_link_names = ["rigid_tip_link1"]
     # robot_state = robot.get_current_state()
-    other_joint_values = [0.6974335690969342, -1.7504954265803478, -1.9503007193486717, -1.340203426021494,
-                          -1.40115032350114, 1.6977166700000357, 0.21991148575129937, 0.6974335690969342]
+    other_joint_values = [0, -1.7504954265803478, -1.9503007193486717, -1.340203426021494,
+                          -1.40115032350114, 1.6977166700000357, 0.21991148575129937, 0]
 
     robot_state.joint_state.position = config + other_joint_values
     resp = ik_srv(header,fk_link_names,robot_state)
@@ -243,7 +253,7 @@ def get_dis(configs,k_start_config,h_start_config,connect_mode=p.GUI):
                            useFixedBase=True)
     obstacles = [plane, ur10_kong, obstacle2, obstacle3]
     #step2: set start configs
-    start_conf_kong = k_start_config[1]
+    start_conf_kong = k_start_config[0]
     start_conf_hong = h_start_config
     set_joint_positions(ur10_hong, UR10_JOINT_INDICES, start_conf_hong)
     set_joint_positions(ur10_kong, UR10_JOINT_INDICES, start_conf_kong)
@@ -255,6 +265,15 @@ def get_dis(configs,k_start_config,h_start_config,connect_mode=p.GUI):
         if dis is None:
             min_dis.append(0)
             continue
-        min_dis_tmp = min(dis)
+        min_dis_tmp = 0
+        w1 = 0.5 / len(dis)
+        w2 = 0.5
+        final_dis = p.getClosestPoints(bodyA=ur10_hong, bodyB=ur10_kong, distance=100000,
+                                      linkIndexA=9,physicsClientId=0)
+        final_dis = np.array(final_dis)
+        final_dis = np.min(final_dis[:,8])
+        for i in range(len(dis)):
+            min_dis_tmp += w1 * dis[i]
+        min_dis_tmp += w2 * final_dis
         min_dis.append(min_dis_tmp)
     return min_dis
