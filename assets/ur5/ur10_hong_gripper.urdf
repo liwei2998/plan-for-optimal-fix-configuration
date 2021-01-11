@@ -170,7 +170,7 @@
 		<visual>
 			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
 			<geometry>
-				<mesh filename="assets/ur5/collision/base_link1.STL" scale="1.00000 1.00000 1.00000"/>
+				<mesh filename="assets/ur5/collision/base_link_cam.STL" scale="1.00000 1.00000 1.00000"/>
 			</geometry>
 			<material name="mat_-1_0">
 				<color rgba="0.79216 0.81961 0.93333 1.00000" />
@@ -179,7 +179,7 @@
 		<collision>
 			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
 			<geometry>
-				<mesh filename="assets/ur5/collision/base_link1.STL" scale="1.00000 1.00000 1.00000"/>
+				<mesh filename="assets/ur5/collision/base_link_cam.STL" scale="1.00000 1.00000 1.00000"/>
 			</geometry>
 		</collision>
 	</link>
@@ -315,7 +315,7 @@
 		<parent link="base_link1"/>
 		<child link="rigid_link1"/>
 		<dynamics damping="1.0" friction="0.0001"/>
-		<origin rpy="0.00000 -0.00000 0.00000" xyz="-0.01800 0.06040 0.03100"/>
+		<origin rpy="0.00000 -0.76 0.00000" xyz="-0.01800 0.06040 0.03100"/>
 		<axis xyz="0.00000 -1.00000 0.00000"/>
 		<limit
 		  lower="-3.1415926"

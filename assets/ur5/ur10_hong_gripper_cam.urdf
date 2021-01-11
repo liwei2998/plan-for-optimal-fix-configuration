@@ -1,6 +1,6 @@
 <?xml version="0.0" ?>
 <robot name="">
-	<link name="kong_base_link">
+	<link name="base_link">
 		<inertial>
 			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
 			<mass value="4.00000"/>
@@ -22,7 +22,7 @@
 			</geometry>
 		</collision>
 	</link>
-	<link name="kong_shoulder_link">
+	<link name="shoulder_link">
 		<inertial>
 			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
 			<mass value="7.77800"/>
@@ -44,7 +44,7 @@
 			</geometry>
 		</collision>
 	</link>
-	<link name="kong_upper_arm_link">
+	<link name="upper_arm_link">
 		<inertial>
 			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.30600"/>
 			<mass value="12.93000"/>
@@ -66,7 +66,7 @@
 			</geometry>
 		</collision>
 	</link>
-	<link name="kong_forearm_link">
+	<link name="forearm_link">
 		<inertial>
 			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.28615"/>
 			<mass value="3.87000"/>
@@ -88,7 +88,7 @@
 			</geometry>
 		</collision>
 	</link>
-	<link name="kong_wrist_1_link">
+	<link name="wrist_1_link">
 		<inertial>
 			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
 			<mass value="1.96000"/>
@@ -110,7 +110,7 @@
 			</geometry>
 		</collision>
 	</link>
-	<link name="kong_wrist_2_link">
+	<link name="wrist_2_link">
 		<inertial>
 			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
 			<mass value="1.96000"/>
@@ -132,7 +132,7 @@
 			</geometry>
 		</collision>
 	</link>
-	<link name="kong_wrist_3_link">
+	<link name="wrist_3_link">
 		<inertial>
 			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
 			<mass value="0.20200"/>
@@ -154,18 +154,18 @@
 			</geometry>
 		</collision>
 	</link>
-	<link name="kong_ee_link">
+	<link name="ee_link">
 		<inertial>
 			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
 			<mass value="1.00000"/>
 			<inertia ixx="0.00000" ixy="0" ixz="0" iyy="0.00000" iyz="0" izz="0.00000"/>
 		</inertial>
 	</link>
-	<link name="base_link2">
+	<link name="base_link1">
 		<inertial>
 			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00018 0.01717 0.00798"/>
 			<mass value="0.11784"/>
-			<inertia ixx="0.00046" ixy="0" ixz="0" iyy="0.00013" iyz="0" izz="0.00051"/>
+			<inertia ixx="0.00046" ixy="0" ixz="0" iyy="0.00014" iyz="0" izz="0.00051"/>
 		</inertial>
 		<visual>
 			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
@@ -183,7 +183,7 @@
 			</geometry>
 		</collision>
 	</link>
-	<link name="rigid_link2">
+	<link name="rigid_link1">
 		<inertial>
 			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00246 0.00390 0.01312"/>
 			<mass value="0.04453"/>
@@ -205,7 +205,7 @@
 			</geometry>
 		</collision>
 	</link>
-	<link name="rigid_tip_link2">
+	<link name="rigid_tip_link1">
 		<inertial>
 			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00774 -0.00085 -0.06113"/>
 			<mass value="0.01345"/>
@@ -227,7 +227,7 @@
 			</geometry>
 		</collision>
 	</link>
-	<link name="soft_tip_link2">
+	<link name="soft_tip_link1">
 		<inertial>
 			<origin rpy="0.00000 -0.00000 0.00000" xyz="-0.06728 -0.00000 -0.00124"/>
 			<mass value="0.02675"/>
@@ -249,90 +249,90 @@
 			</geometry>
 		</collision>
 	</link>
-	<joint name="kong_shoulder_pan_joint" type="revolute">
-		<parent link="kong_base_link"/>
-		<child link="kong_shoulder_link"/>
+	<joint name="shoulder_pan_joint" type="revolute">
+		<parent link="base_link"/>
+		<child link="shoulder_link"/>
 		<dynamics damping="1.0" friction="0.0001"/>
 		<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.12730"/>
 		<axis xyz="0.00000 0.00000 1.00000"/>
 		<limit effort="330.0" lower="-6.2831853" upper="6.2831853" velocity="2.16"/>
 	</joint>
-	<joint name="kong_shoulder_lift_joint" type="revolute">
-		<parent link="kong_shoulder_link"/>
-		<child link="kong_upper_arm_link"/>
+	<joint name="shoulder_lift_joint" type="revolute">
+		<parent link="shoulder_link"/>
+		<child link="upper_arm_link"/>
 		<dynamics damping="1.0" friction="0.0001"/>
 		<origin rpy="0.00000 1.57080 -0.00000" xyz="0.00000 0.22094 0.00000"/>
 		<axis xyz="0.00000 1.00000 0.00000"/>
 		<limit effort="330.0" lower="-6.2831853" upper="6.2831853" velocity="2.16"/>
 	</joint>
-	<joint name="kong_elbow_joint" type="revolute">
-		<parent link="kong_upper_arm_link"/>
-		<child link="kong_forearm_link"/>
+	<joint name="elbow_joint" type="revolute">
+		<parent link="upper_arm_link"/>
+		<child link="forearm_link"/>
 		<dynamics damping="1.0" friction="0.0001"/>
 		<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 -0.17190 0.61200"/>
 		<axis xyz="0.00000 1.00000 0.00000"/>
 		<limit effort="150.0" lower="-6.2831853" upper="6.2831853" velocity="3.15"/>
 	</joint>
-	<joint name="kong_wrist_1_joint" type="revolute">
-		<parent link="kong_forearm_link"/>
-		<child link="kong_wrist_1_link"/>
+	<joint name="wrist_1_joint" type="revolute">
+		<parent link="forearm_link"/>
+		<child link="wrist_1_link"/>
 		<dynamics damping="1.0" friction="0.0001"/>
 		<origin rpy="0.00000 1.57080 -0.00000" xyz="0.00000 0.00000 0.57230"/>
 		<axis xyz="0.00000 1.00000 0.00000"/>
 		<limit effort="54.0" lower="-6.2831853" upper="6.2831853" velocity="3.2"/>
 	</joint>
-	<joint name="kong_wrist_2_joint" type="revolute">
-		<parent link="kong_wrist_1_link"/>
-		<child link="kong_wrist_2_link"/>
+	<joint name="wrist_2_joint" type="revolute">
+		<parent link="wrist_1_link"/>
+		<child link="wrist_2_link"/>
 		<dynamics damping="1.0" friction="0.0001"/>
 		<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.11490 0.00000"/>
 		<axis xyz="0.00000 0.00000 1.00000"/>
 		<limit effort="54.0" lower="-6.2831853" upper="6.2831853" velocity="3.2"/>
 	</joint>
-	<joint name="kong_wrist_3_joint" type="revolute">
-		<parent link="kong_wrist_2_link"/>
-		<child link="kong_wrist_3_link"/>
+	<joint name="wrist_3_joint" type="revolute">
+		<parent link="wrist_2_link"/>
+		<child link="wrist_3_link"/>
 		<dynamics damping="1.0" friction="0.0001"/>
 		<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.11570"/>
 		<axis xyz="0.00000 1.00000 0.00000"/>
 		<limit effort="54.0" lower="-6.2831853" upper="6.2831853" velocity="3.2"/>
 	</joint>
-	<joint name="kong_ee_fixed_joint" type="fixed">
-		<parent link="kong_wrist_3_link"/>
-		<child link="kong_ee_link"/>
+	<joint name="ee_fixed_joint" type="fixed">
+		<parent link="wrist_3_link"/>
+		<child link="ee_link"/>
 		<dynamics damping="1.0" friction="0.0001"/>
 		<origin rpy="0.00000 -0.00000 1.57080" xyz="0.00000 0.09220 0.00000"/>
 		<axis xyz="0.00000 0.00000 0.00000"/>
 	</joint>
 	<joint name="joint_dummy1" type="fixed">
-		<parent link="kong_ee_link"/>
-		<child link="base_link2"/>
+		<parent link="ee_link"/>
+		<child link="base_link1"/>
 		<dynamics damping="1.0" friction="0.0001"/>
 		<origin rpy="1.57080 0.00000 1.57080" xyz="0.00000 0.00000 0.00000"/>
 		<axis xyz="0.00000 0.00000 1.00000"/>
 	</joint>
-	<joint name="rigid_rev_joint2" type="revolute">
-		<parent link="base_link2"/>
-		<child link="rigid_link2"/>
+	<joint name="rigid_rev_joint1" type="revolute">
+		<parent link="base_link1"/>
+		<child link="rigid_link1"/>
 		<dynamics damping="1.0" friction="0.0001"/>
-		<origin rpy="0.00000 -0.71 0.00000" xyz="-0.01800 0.06040 0.03100"/>
+		<origin rpy="0.00000 -0.00000 0.00000" xyz="-0.01800 0.06040 0.03100"/>
 		<axis xyz="0.00000 -1.00000 0.00000"/>
 		<limit
-	      lower="-3.1415926"
-	      upper="3.1415926"
-	      effort="0"
-	      velocity="0" />
+		  lower="-3.1415926"
+		  upper="3.1415926"
+		  effort="0"
+		  velocity="0" />
 	</joint>
-	<joint name="rigid_tip_joint2" type="fixed">
-		<parent link="rigid_link2"/>
-		<child link="rigid_tip_link2"/>
+	<joint name="rigid_tip_joint1" type="fixed">
+		<parent link="rigid_link1"/>
+		<child link="rigid_tip_link1"/>
 		<dynamics damping="1.0" friction="0.0001"/>
 		<origin rpy="0.00000 -0.13252 3.14159" xyz="0.02939 -0.00085 0.11906"/>
 		<axis xyz="0.00000 0.00000 0.00000"/>
 	</joint>
-	<joint name="soft_tip_joint2" type="fixed">
-		<parent link="base_link2"/>
-		<child link="soft_tip_link2"/>
+	<joint name="soft_tip_joint1" type="fixed">
+		<parent link="base_link1"/>
+		<child link="soft_tip_link1"/>
 		<dynamics damping="1.0" friction="0.0001"/>
 		<origin rpy="0.00000 -0.66549 0.00000" xyz="0.11681 0.06100 0.09874"/>
 		<axis xyz="0.00000 0.00000 0.00000"/>
