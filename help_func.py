@@ -21,7 +21,6 @@ import pybullet_data
 import pybullet_utils
 from collision_utils import get_collision_fn
 import pybullet_planning as pp
-import numpy as np
 from scipy import interpolate
 import scipy.io as sio
 import IPython
@@ -92,7 +91,8 @@ def plane_transformation(x,y,tag_pos,tag_rot):
     return new[0],new[1]
 
 def paper_polygen(tag_pos,tag_rot):
-    #used to get paper polygen in reall world
+    #used to get paper vertice positions in real world
+    #return vertice positions through apriltag information
     v1 = np.array([0.105,0.145,0.71])
     v2 = np.array([0.105,-0.145,0.71])
     v3 = np.array([-0.105,-0.145,0.71])
@@ -106,9 +106,10 @@ def paper_polygen(tag_pos,tag_rot):
     return new_v
 
 def config_generate(group,center,kong_configs,robot_state,tag_pos,tag_rot,num=20,sim=True):
-    # get collision free ik solutions from random sample, solutions stored in conf[]
+    # get collision free ik solutions from random sample.
+    # solutions are stored in conf[]
     #step1: set up simulator
-    physicsClient = p.connect(p.GUI)
+    physicsClient = p.connect(p.DIRECT)
     p.setAdditionalSearchPath(pybullet_data.getDataPath())
     p.setPhysicsEngineParameter(enableFileCaching=0)
     p.setGravity(0, 0, -9.8)
@@ -123,8 +124,13 @@ def config_generate(group,center,kong_configs,robot_state,tag_pos,tag_rot,num=20
     elif sim == 0:
         baseOrientation1 = [0,0,-0.70710678,0.70710678]
         baseOrientation2 = [0,0,0.70710678,0.70710678]
+
     ur10_hong = p.loadURDF('assets/ur5/ur10_hong_gripper.urdf', basePosition=[0.885, 0.012, 0.786], baseOrientation=baseOrientation1, useFixedBase=True)
     ur10_kong = p.loadURDF('assets/ur5/ur10_kong_gripper.urdf', basePosition=[-0.916, 0, 0.77], baseOrientation=baseOrientation2,useFixedBase=True)
+    obstacle1 = p.loadURDF('assets/ur5/robot_optical_table_hong.urdf',
+                           basePosition=[1.35,0.012,0.016],
+                           baseOrientation=[0,0,1,0],
+                           useFixedBase=True)
     obstacle2 = p.loadURDF('assets/ur5/robot_movable_table.urdf',
                            basePosition=[0, 0, 0],
                            baseOrientation=[0,0,0,1],
@@ -134,60 +140,85 @@ def config_generate(group,center,kong_configs,robot_state,tag_pos,tag_rot,num=20
                            baseOrientation=[0,0,1,0],
                            useFixedBase=True)
     obstacles = [plane, ur10_kong, obstacle2, obstacle3]
-    #step2: start and goal
+    # visualize paper vertices, reference:
+    # https://github.com/bulletphysics/bullet3/blob/master/examples/pybullet/examples/createVisualShape.py
+    visualShapeId = p.createVisualShape(shapeType=p.GEOM_BOX,
+                                    halfExtents = [0.01,0.01,0.01],
+                                    rgbaColor=[1, 1, 1, 1],
+                                    specularColor=[0.4, .4, 0],
+                                    visualFramePosition=[0,0,0])
+
+    #step2: set start configuration
     start_conf_kong = kong_configs[0]
     set_joint_positions(ur10_kong, UR10_JOINT_INDICES, start_conf_kong)
-    #step3: random sample configs
+    #step3: randomly sample configs
     ik = get_ik.GetIK(group)
     pose = PoseStamped()
     pose.header.frame_id = "world"
     pose.header.stamp = rospy.Time.now()
-    pose.pose.position.z = 0.704 + 0.1411 #0.71(table height) + 0.11411 (dis_z between rogid_tip_link and hong_tool0)
-    polygen = get_poly_from_gripper(center)
+    pose.pose.position.z = 0.703 + 0.1411 #0.71(table height) + 0.11411 (dis_z between rogid_tip_link and hong_tool0)
+    # polygen = get_poly_from_gripper(center)
     c = np.arange(-np.pi,np.pi,np.pi/1000)
     conf = []
     i = 0
+    # get paper vertices with apriltag information
     poly = paper_polygen(tag_pos,tag_rot)
+    # show paper vertices in pybullet
+    for ver in range(len(poly)):
+        p.createMultiBody(baseMass=1,
+                          baseInertialFramePosition=[0, 0, 0],
+                          baseVisualShapeIndex=visualShapeId,
+                          basePosition=poly[ver],
+                          useMaximalCoordinates=True)
+    rospy.sleep(1)
     while (i<num):
+        # sample orientation
         theta = random.choice(c)
+        # sample position
+        x, y = weight_sample_x_y() #weighted sample
+        x, y = plane_transformation(x,y,tag_pos,tag_rot) #transform with apriltag information
+        rospy.sleep(0.5)
+        #we have sampled rigid_link_tip1's position, and now transform this position to hong_tool0's position, to compute ik
         mat = [[np.cos(theta),np.sin(theta),0,0],[np.sin(theta),-np.cos(theta),0,0],[0,0,-1,0],[0,0,0,1]]
         trans = np.array([-0.07200367743271228, 0.059549999999985115, -0.1411026781906094, 0])
-        delta = np.dot(np.array(mat),trans) #sample rigid_link_tip1's position, and transform this position to hong_tool0's position, to compute ik
-        x, y = weight_sample_x_y()
-        x, y = plane_transformation(x,y,tag_pos,tag_rot)
-        rospy.sleep(0.5)
+        delta = np.dot(np.array(mat),trans)
         pose.pose.position.x = x + delta[0]
         pose.pose.position.y = y + delta[1]
-
-        if is_inPoly(polygen,(x,y,0.87)) == 1:
-            continue
+        #
+        # if is_inPoly(polygen,(x,y,0.87)) == 1:
+        #     continue
         ori = tf.transformations.quaternion_from_matrix(mat)
         pose.pose.orientation.x = ori[0]
         pose.pose.orientation.y = ori[1]
         pose.pose.orientation.z = ori[2]
         pose.pose.orientation.w = ori[3]
-
+        # compute ik
         m = ik.get_ik(pose,robot_state)
         if m == []:
             print "no configs"
             continue
+        #to make sure that rigid_link_tip1 is in the paper
         elif test_fk(m[:6],poly,robot_state) == 0:
             print "not in paper polygen"
-            #to make sure that rigid_link_tip1 is in the paper
             continue
         else:
             #step3: collision check
+            # set hong's config first as m
             set_joint_positions(ur10_hong, UR10_JOINT_INDICES, m[:7])
             count = 0
+            # for every configs in kong's trajectory, conduct collision check
             for aa in range(len(kong_configs)):
                 set_joint_positions(ur10_kong, UR10_JOINT_INDICES, kong_configs[aa])
+                # reference: from collision_utils import get_collision_fn
                 collision_fn = get_collision_fn(ur10_hong, UR10_JOINT_INDICES, obstacles=obstacles,
                                                 attachments=[], self_collisions=True,
                                                 disabled_collisions=set())
+                # if collision_fn(m[:7]) == 0, no collision
                 if collision_fn(m[:7]) == 0:
                     count = count + 1
                 else:
                     break
+            # if count == len(kong_configs), the config of hong is collision-free with all configs in kong's trajectory
             if count == len(kong_configs):
                 # for bb in range(7):
                 #     if m[bb] >= 3.1415926:
@@ -201,8 +232,7 @@ def config_generate(group,center,kong_configs,robot_state,tag_pos,tag_rot,num=20
     conf = conf[:,:7]
     conf = conf.tolist()
     return conf
-def ppp():
-    print 1
+
 def test_fk(config,paper_polygen,robot_state):
     #test if rigid_tip_link1 is in the paper polygen
     ik_srv = rospy.ServiceProxy('/compute_fk', GetPositionFK)
@@ -213,6 +243,9 @@ def test_fk(config,paper_polygen,robot_state):
     header.stamp = rospy.Time.now()
     fk_link_names = ["rigid_tip_link1"]
     # robot_state = robot.get_current_state()
+    # 0: rigid_rev_joint1 and 2.
+    # -1.75...: kong's joint values
+    # the values of other_joint_values does not affect the result
     other_joint_values = [0, -1.7504954265803478, -1.9503007193486717, -1.340203426021494,
                           -1.40115032350114, 1.6977166700000357, 0.21991148575129937, 0]
 
@@ -230,7 +263,7 @@ def test_fk(config,paper_polygen,robot_state):
     return is_inPoly(paper_polygen,pos)
 
 def get_dis(configs,k_start_config,h_start_config,connect_mode=p.GUI):
-    #input valid configs, obtain smallest distance for each config
+    #input valid configs of hong, obtain smallest distance for each config
     #step1: set up simulator
     physicsClient = p.connect(p.DIRECT)
     p.setAdditionalSearchPath(pybullet_data.getDataPath())
@@ -261,19 +294,29 @@ def get_dis(configs,k_start_config,h_start_config,connect_mode=p.GUI):
     min_dis = []
     for c in configs:
         goal_conf_hong = c
+        #reference: import pybullet_planning as pp
+        #return path: path planed by birrt algorithm
+        #return dis: closest distances between 2 arms in each collision check along the path. return a list
         path, dis = pp.plan_joint_motion(ur10_hong,UR10_JOINT_INDICES,start_conf_hong, goal_conf_hong,obstacles)
+        #if dis is none, the path is invalid, continue
         if dis is None:
             min_dis.append(0)
             continue
         min_dis_tmp = 0
+        # is the path is valid,
         w1 = 0.5 / len(dis)
         w2 = 0.5
+        # get closest distance between 2 arms at the final configuration. return a list information
         final_dis = p.getClosestPoints(bodyA=ur10_hong, bodyB=ur10_kong, distance=100000,
                                       linkIndexA=9,physicsClientId=0)
         final_dis = np.array(final_dis)
+        # choose the distance information from the return. now final_dis is the closest distance, a float
         final_dis = np.min(final_dis[:,8])
+        # weighted add closest distance
         for i in range(len(dis)):
             min_dis_tmp += w1 * dis[i]
         min_dis_tmp += w2 * final_dis
+        # now min_dis_tmp can represent the closest distance along the trajectory
+        # min_dis is a list that restore min_dis_tmp along all trajectorys
         min_dis.append(min_dis_tmp)
     return min_dis
